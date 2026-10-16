@@ -14,7 +14,7 @@ Aether features a `egui` based UI that is designed to be distraction-free (excep
 
 ### FTT-based Visualizer
 Aether uses real-time, hardware-accelerated FTT processing with configurable reactivity gain (pretty basic imo but still) with multiple presets.
-It also gives a pretty broken in the developer's words, subwoofer cone with reactive, impulse-driven effects.\
+It also gives a pretty broken in the developer's words, subwoofer cone with reactive, impulse-driven effects.
 
 That covers the feature set for now.
 
@@ -39,16 +39,19 @@ sudo apt install -y pkg-config libasound2-dev libdbus-1-dev libfontconfig-1-dev 
 
 ### - Clone the repo first:
 
-`git clone https://github.com/ayxrc/aether.git 
-  cd aether`
+``bash
+git clone https://github.com/ayxrc/aether.git 
+cd aether``
 
 ### - Test it out:
  
-`make run`
+``bash
+make run``
 
 ### - Build and install
 
-``sudo make install``
+``bash
+sudo make install``
 
 # Configuration
 Aether stores persistent settings in a JSON file at:
