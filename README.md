@@ -24,34 +24,36 @@ That covers the feature set for now.
 This project requires the Rust toolchain to build. Download that along with these following basic dependencies.
 
 ### Debian and Debian-based systems
-`sudo apt update
-sudo apt install -y pkg-config libasound2-dev libdbus-1-dev libfontconfig-1-dev libx11-dev libxcb-render0-dev`
+``bash
+sudo apt update
+sudo apt install -y pkg-config libasound2-dev libdbus-1-dev libfontconfig-1-dev libx11-dev libxcb-render0-dev``
 
 ### Arch-based systems
-` sudo pacman -S --needed base-devel pkgconf alsa-lib dbus fontconfig`
+``bash 
+sudo pacman -S --needed base-devel pkgconf alsa-lib dbus fontconfig``
 
 ### RHEL/Fedora
 
-` sudo dnf install pkgconfig alsa-lib-devel dbus-devel fontconfig-devel`
+``bash
+sudo dnf install pkgconfig alsa-lib-devel dbus-devel fontconfig-devel``
 
 
 ## Building
 
 ### - Clone the repo first:
 
-``bash
+````bash
 git clone https://github.com/ayxrc/aether.git 
-cd aether``
+cd aether````
 
 ### - Test it out:
  
-``bash
-make run``
+````make run````
 
 ### - Build and install
 
-``bash
-sudo make install``
+````bash
+sudo make install````
 
 # Configuration
 Aether stores persistent settings in a JSON file at:
