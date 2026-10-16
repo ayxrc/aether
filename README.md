@@ -18,15 +18,64 @@ It also gives a pretty broken in the developer's words, subwoofer cone with reac
 
 That covers the feature set for now.
 
+# Build Instructions
+
 ## Prerequisites (Linux)
 This project requires the Rust toolchain to build. Download that along with these following basic dependencies.
 
 ### Debian and Debian-based systems
-` bash
-sudo apt update
-sudo apt install -y pkg-config libasound2-dev libdbus-1-dev libfontconfig-1-dev libx11-dev libxcb-render0-dev
-`
+`sudo apt update
+sudo apt install -y pkg-config libasound2-dev libdbus-1-dev libfontconfig-1-dev libx11-dev libxcb-render0-dev`
+
+### Arch-based systems
+` sudo pacman -S --needed base-devel pkgconf alsa-lib dbus fontconfig`
+
+### RHEL/Fedora
+
+` sudo dnf install pkgconfig alsa-lib-devel dbus-devel fontconfig-devel`
 
 
+## Building
 
+### - Clone the repo first:
 
+`git clone https://github.com/ayxrc/aether.git 
+  cd aether`
+
+### - Test it out:
+ 
+`make run`
+
+### - Build and install
+
+``sudo make install``
+
+# Configuration
+Aether stores persistent settings in a JSON file at:
+
+- Linux: `$XDG_CONFIG_DIR/aether/config.json`
+- Windows: `%APPDATA%\aether\config.json`
+- macOS: `~/Library/Application Support/com.ayxrc.aether/`
+
+## Source tree overview
+` .
+├── Cargo.lock
+├── Cargo.toml
+├── Makefile
+├── README.md
+└── src
+    ├── audio.rs
+    ├── doc.rs
+    ├── fft.rs
+    ├── LICENSE
+    ├── lyrics.rs
+    ├── main.rs
+    ├── mpris.rs
+    ├── state.rs
+    └── ui.rs
+     `
+     
+
+## License
+This project is open-source available under licenses of the GPL.
+Kindly credit the author when creating any forks.
