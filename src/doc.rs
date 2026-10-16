@@ -1,0 +1,3 @@
+//! hello. this is the documentation for this app. i dont know what i have done but school gave puja holidays so i better util it. half the code is built on prayers and hope. and maybe a bit of gemini and opencode sex. eww what the fuck. no. anyway nl.
+//! there are a few custom stuff here, like a custom audio engine, mpris handler and lyrical engine. but no sys font support, no repeat or shuffle. and really unfinished. i can do whatever to procrastinate making the book huh? this might help with the book actually. lofi music haha
+//! and maybe it may also work better if i listen to music while writing the book. oh anyway this shit was made cuz the linux music apps on the pkgrepos are fucking dumb so i diyd. bye.
