@@ -105,7 +105,7 @@ impl Default for AppConfig {
 // Config shit
 impl AppConfig {
     pub fn load() -> Self {
-        if let Some(proj_dirs) = ProjectDirs::from("com", "aether", "aether") {
+        if let Some(proj_dirs) = ProjectDirs::from("com", "ayxrc", "aether") {
             let config_file = proj_dirs.config_dir().join("config.json");
             if let Ok(data) = fs::read_to_string(config_file) {
                 if let Ok(cfg) = serde_json::from_str(&data) {
@@ -117,7 +117,7 @@ impl AppConfig {
     }
 // More config shit (fuck you if you dont have XDG config dir you gobo linux slut i bet you wank off to /Applications you cock-sucker non standard follower)
     pub fn save(&self) -> Result<(), String> {
-        if let Some(proj_dirs) = ProjectDirs::from("com", "aether", "aether") {
+        if let Some(proj_dirs) = ProjectDirs::from("com", "ayxrc", "aether") {
             let dir = proj_dirs.config_dir();
             fs::create_dir_all(dir).map_err(|e| e.to_string())?;
             let config_file = dir.join("config.json");
