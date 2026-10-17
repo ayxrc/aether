@@ -90,72 +90,73 @@ fn setup_hyper_minimal_theme(ctx: &egui::Context) {
 fn load_font(ctx: &egui::Context) {
     let mut fonts = egui::FontDefinitions::default();
     let source = SystemSource::new();
-    let cjk_fonts = [
-        FamilyName::Title("Noto Sans Devanagari".into()),
-        FamilyName::Title("Noto Sans CJK SC".into()),
-        FamilyName::Title("Noto Sans CJK JP".into()),
-        FamilyName::Title("Noto Sans CJK KR".into()),
-        FamilyName::Title("Noto Sans CJK TC".into()),
-        FamilyName::Title("Noto Sans Thai".into()),
-        FamilyName::Title("Noto Sans Arabic".into()),
-        FamilyName::Title("Noto Sans Hebrew".into()),
-        FamilyName::Title("Noto Sans Armenian".into()),
-    ]; 
 
-    let mut register = |family: FamilyName, font_key: &'static str, target_family: egui::FontFamily| {
-        if let Ok(handle) = source.select_best_match(&[family], &Properties::new()) {
-            let data = match handle {
-                Handle::Path {path, .. } => std::fs::read(path).ok(),
-                Handle::Memory { bytes, .. } => Some((*bytes).clone()),
-            };
-            if let Some(bytes) = data{
-                fonts.font_data.insert(
-                    font_key.to_string(),
-                    egui::FontData::from_owned(bytes),
-                );
-                fonts
-                    .families
-                    .entry(target_family)
-                    .or_default()
-                    .insert(0, font_key.to_string());
-            }
+    // 1. Load standard system Sans-Serif for primary UI text (Latin, numbers, etc.)
+    if let Ok(handle) = source.select_best_match(&[FamilyName::SansSerif], &Properties::new()) {
+        if let Some(bytes) = match handle {
+            Handle::Path { path, .. } => std::fs::read(path).ok(),
+            Handle::Memory { bytes, .. } => Some((*bytes).clone()),
+        } {
+            fonts.font_data.insert("sys_sans".to_string(), egui::FontData::from_owned(bytes));
+            fonts.families.entry(egui::FontFamily::Proportional).or_default().push("sys_sans".to_string());
         }
-    };
-    register(FamilyName::SansSerif, "sys_sans", egui::FontFamily::Proportional);
-    register(FamilyName::Monospace, "sys_mono", egui::FontFamily::Monospace);
-
-    if let Ok(handle) = source.select_best_match(&cjk_fonts, &Properties::new()) {
-        let (data, font_index) = match handle {
-            Handle::Path { path, font_index} => {
-                eprintln!("Loaded CJK font: {} (index {})", path.display(), font_index);
-                (std::fs::read(path).ok(), font_index)
-            }
-            
-
-            Handle::Memory { bytes, font_index} => {
-                (Some(bytes.to_vec().clone()), font_index)
-            }
-        };
-        if let Some(bytes) = data {
-            let mut font_data = egui::FontData::from_owned(bytes);
-            font_data.index = font_index;
-            fonts.font_data.insert(
-                "sys_cjk".to_string(),
-                font_data,
-            );
-            // do the fonts 
-            // .families and whatever else again because sys_latin and sys_cjk different
-            fonts
-                .families
-                .entry(egui::FontFamily::Proportional)
-                .or_default()
-                .insert(1,"sys_cjk".to_string());
-
-        }
-        ctx.set_fonts(fonts);
     }
-    
+
+    // 2. Load Monospace for code/timers
+    if let Ok(handle) = source.select_best_match(&[FamilyName::Monospace], &Properties::new()) {
+        if let Some(bytes) = match handle {
+            Handle::Path { path, .. } => std::fs::read(path).ok(),
+            Handle::Memory { bytes, .. } => Some((*bytes).clone()),
+        } {
+            fonts.font_data.insert("sys_mono".to_string(), egui::FontData::from_owned(bytes));
+            fonts.families.entry(egui::FontFamily::Monospace).or_default().push("sys_mono".to_string());
+        }
+    }
+
+    // 3. Explicitly search for specific script/language fallback fonts so they don't fight each other
+    let specific_fonts = [
+        ("sys_devanagari", "Noto Sans Devanagari"),
+        ("sys_cjk_sc", "Noto Sans CJK SC"),
+        ("sys_cjk_jp", "Noto Sans CJK JP"),
+        ("sys_cjk_kr", "Noto Sans CJK KR"),
+        ("sys_cjk_tc", "Noto Sans CJK TC"),
+        ("sys_thai", "Noto Sans Thai"),
+        ("sys_arabic", "Noto Sans Arabic"),
+        ("sys_hebrew", "Noto Sans Hebrew"),
+        ("sys_armenian", "Noto Sans Armenian"),
+    ];
+
+    for (key, font_name) in specific_fonts.iter() {
+        if let Ok(handle) = source.select_best_match(&[FamilyName::Title((*font_name).into())], &Properties::new()) {
+            let (data, font_index) = match handle {
+                Handle::Path { path, font_index } => (std::fs::read(path).ok(), font_index),
+                Handle::Memory { bytes, font_index } => (Some(bytes.to_vec()), font_index),
+            };
+
+            if let Some(bytes) = data {
+                let mut font_data = egui::FontData::from_owned(bytes);
+                font_data.index = font_index;
+                fonts.font_data.insert((*key).to_string(), font_data);
+                
+                // Push as fallback for proportional text
+                fonts.families
+                    .entry(egui::FontFamily::Proportional)
+                    .or_default()
+                    .push((*key).to_string());
+
+                fonts.families
+                    .entry(egui::FontFamily::Monospace)
+                    .or_default()
+                    .push((*key).to_string());
+            }
+        }
+    }
+
+    ctx.set_fonts(fonts);
 }
+    
+    
+
 
 
 // End of file, go fuck yourself. (or look at the other files??)
