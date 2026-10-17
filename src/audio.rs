@@ -223,6 +223,9 @@ pub fn spawn_audio_engine(shared_state: Arc<Mutex<SharedState>>) -> Sender<Audio
                                                     Arc::clone(&samples_played),
                                                 );
 // yay some stuff.
+                                                if let Some(old) = active_sink.take() {
+                                                    old.stop();
+                                                }
                                                 if let Ok(new_sink) = Sink::try_new(handle) {
                                                     new_sink.set_volume(master_volume);
                                                     new_sink.append(tapped_source);
@@ -230,8 +233,8 @@ pub fn spawn_audio_engine(shared_state: Arc<Mutex<SharedState>>) -> Sender<Audio
                                                     active_sink = Some(new_sink);
 
                                                     // The stuff that makes music music: covers (painful haha)
-                                                    let cover_art =
-                                                        extract_cover_art(&track.path);
+                                         //           let cover_art =
+                                           //             extract_cover_art(&track.path);
                                                     let (lyrics, lyrics_source) =
                                                         load_local_or_embedded_lyrics(&track.path);
 // why is state code in the audio engine past me, it works tho, i wont yell at it.
@@ -246,7 +249,7 @@ pub fn spawn_audio_engine(shared_state: Arc<Mutex<SharedState>>) -> Sender<Audio
                                                         state.elapsed = Duration::ZERO;
                                                         state.lyrics = lyrics.clone();
                                                         state.lyrics_source = lyrics_source;
-                                                        state.cover_art = cover_art;
+                                                        state.cover_art = None;
                                                         state.cover_art_id =
                                                             state.cover_art_id.wrapping_add(1);
                                                         state.is_playing = true;
@@ -256,10 +259,21 @@ pub fn spawn_audio_engine(shared_state: Arc<Mutex<SharedState>>) -> Sender<Audio
 
                                                     if should_auto_fetch {
                                                         spawn_online_lyrics_search(
-                                                            track,
+                                                            track.clone(),
                                                             Arc::clone(&shared_state),
                                                         );
                                                     }
+                                                    let art_path = track.path.clone();
+                                                    let art_state = Arc::clone(&shared_state);
+                                                    thread::spawn(move || {
+                                                    let cover_art = extract_cover_art(&art_path);
+                                                    if let Ok(mut st) = art_state.lock() {
+                                                        if st.current_track.as_ref().map(|t| &t.path) == Some(&art_path) {
+                                                            st.cover_art = cover_art;
+                                                            st.cover_art_id = st.cover_art_id.wrapping_add(1);
+                                                        }
+                                                    }
+                                                });
                                                 }
                                             }
                                             // Why rodio
@@ -452,12 +466,12 @@ pub fn spawn_audio_engine(shared_state: Arc<Mutex<SharedState>>) -> Sender<Audio
                         active_sink = None;
                         let next_idx = {
                             let mut state = shared_state.lock().unwrap();
-                            state.is_playing = false;
                             if state.track_list.len() > 1 {
                                 state
                                     .current_track_idx
                                     .map(|i| (i + 1) % state.track_list.len())
                             } else {
+                                state.is_playing = false;
                                 None
                             }
                         };
