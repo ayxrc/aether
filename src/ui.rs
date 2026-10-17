@@ -130,7 +130,7 @@ impl eframe::App for PlayerApp {
         };
 
         if is_playing || spectrum.iter().any(|&v| v > 0.005) {
-            ctx.request_repaint_after(Duration::from_millis(500));
+            ctx.request_repaint_after(Duration::from_millis(14));
         } else {
             ctx.request_repaint_after(Duration::from_millis(14));
         }
