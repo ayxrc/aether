@@ -5,7 +5,7 @@
 mod audio;
 mod fft;
 mod lyrics;
-mod mpris;
+mod controls;
 mod state;
 mod ui;
 mod doc;

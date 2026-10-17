@@ -24,3 +24,9 @@ ureq = { version = "2.10", features = ["json"] }
 urlencoding = "2.1"
 zbus = { version = "4.4", features = ["blocking"] }
 font-kit = "0.14"
+souvlaki = "0.8.3"
+[target.'cfg(target_os = "windows")'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+] }

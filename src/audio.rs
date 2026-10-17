@@ -2,7 +2,7 @@
 // make sure the fucker uses the crates instead of nutting on them and doing shit all with them except being a crusty sock.
 use crate::fft::{spawn_fft_worker, FFT_SIZE};
 use crate::lyrics::{load_local_or_embedded_lyrics, spawn_online_lyrics_search};
-use crate::mpris::spawn_mpris_server;
+use crate::controls::spawn_mpris_server;
 use crate::state::{CoverArtData, SharedState, TrackEntry};
 use lofty::prelude::*;
 use lofty::probe::Probe;

@@ -1,7 +1,7 @@
 // The genital of the app (get it long?? i could have just said skin wtf)
 
 // Makes sure the shit actually gets used instead of slacking the fuck off
-use crate::mpris::spawn_mpris_server;
+use crate::controls::spawn_mpris_server;
 use crate::audio::{spawn_audio_engine, AudioCommand};
 use crate::lyrics::{current_lyric_index, LyricLine};
 use crate::state::{
