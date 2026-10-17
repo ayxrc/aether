@@ -1,9 +1,9 @@
 # Aether
-A minimal music player and visualizer built in Rust using `egui` and `rodio`  out of spite and rage out of the lack of music players for Linux with good UI elements. Built with low resource overhead, [...]
+A minimal music player and visualizer built in Rust using `egui` and `rodio`  out of spite and rage out of the lack of music players for Linux with good UI elements. Built with low resource overhead, synchronized (not like Musixmatch) and customizable real-time FFT visualization.
   
 
 # ⚠️ AI Warning
-The following source code was troubleshooted, edited and debugged by an Artificial Intelligence robot editing human-written code written by a beginner that copied stackoverflow stuff and misread rust-[...]
+The following source code was troubleshooted, edited and debugged by an Artificial Intelligence robot editing human-written code written by a beginner that copied stackoverflow stuff and misread rust-docs. Be warned.
 
 # ⚠️ Profanity Warning
 The following source code may contain comments filled with profanity or hate speech towards certain people. If you are uncomfortable or disgusted by any of it, please inform in issue threads.
