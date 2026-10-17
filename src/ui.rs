@@ -11,6 +11,7 @@ use eframe::egui::{
     self, Align, Color32, ColorImage, FontFamily, FontId, Layout, Pos2, Rect, RichText, Rounding,
     Sense, Stroke, TextureHandle, TextureOptions, Vec2,
 };
+use core::time::Duration;
 use std::f32::consts::TAU;
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
@@ -129,6 +130,8 @@ impl eframe::App for PlayerApp {
         };
 
         if is_playing || spectrum.iter().any(|&v| v > 0.005) {
+            ctx.request_repaint_after(Duration::from_millis(14));
+        } else {
             ctx.request_repaint_after(Duration::from_millis(14));
         }
 
