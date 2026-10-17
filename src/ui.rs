@@ -16,7 +16,7 @@ use std::f32::consts::TAU;
 use std::path::PathBuf;
 use std::sync::mpsc::Sender;
 use std::sync::{Arc, Mutex};
-use std::time::Duration;
+
 
 // Yay Finally the UI elements that count
 #[derive(PartialEq, Eq, Clone, Copy)]
