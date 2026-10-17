@@ -91,11 +91,16 @@ fn load_font(ctx: &egui::Context) {
     let mut fonts = egui::FontDefinitions::default();
     let source = SystemSource::new();
     let cjk_fonts = [
+        FamilyName::Title("Noto Sans Devanagari".into()),
         FamilyName::Title("Noto Sans CJK SC".into()),
         FamilyName::Title("Noto Sans CJK JP".into()),
         FamilyName::Title("Noto Sans CJK KR".into()),
-
-    ];
+        FamilyName::Title("Noto Sans CJK TC".into()),
+        FamilyName::Title("Noto Sans Thai".into()),
+        FamilyName::Title("Noto Sans Arabic".into()),
+        FamilyName::Title("Noto Sans Hebrew".into()),
+        FamilyName::Title("Noto Sans Armenian".into()),
+    ]; 
 
     let mut register = |family: FamilyName, font_key: &'static str, target_family: egui::FontFamily| {
         if let Ok(handle) = source.select_best_match(&[family], &Properties::new()) {
