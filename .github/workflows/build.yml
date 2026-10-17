@@ -25,15 +25,15 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             artifact_name: aether-linux-x86_64
-            bin_name: aether
+            bin_name: aether-linux
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact_name: aether-windows-x86_64.exe
-            bin_name: aether.exe
+            bin_name: aether-win32.exe
           - os: macos-latest
             target: aarch64-apple-darwin
             artifact_name: aether-macos-arm64
-            bin_name: aether
+            bin_name: aether-silicon
 
     steps:
       - name: Checkout repository
