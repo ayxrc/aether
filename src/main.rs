@@ -124,6 +124,7 @@ fn load_font(ctx: &egui::Context) {
         ("sys_arabic", "Noto Sans Arabic"),
         ("sys_hebrew", "Noto Sans Hebrew"),
         ("sys_armenian", "Noto Sans Armenian"),
+        ("sys_asben", "Noto Sans Bengali"),
     ];
 
     for (key, font_name) in specific_fonts.iter() {
