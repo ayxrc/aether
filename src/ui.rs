@@ -967,7 +967,7 @@ impl PlayerApp {
                         let resp = ui
                             .add(
                                 egui::Label::new(
-                                    RichText::new(&line.text)
+                                    RichText::new(crate::fix_indic_visual_order(&line.text))
                                         .font(FontId::new(font_size, FontFamily::Proportional))
                                         .color(text_color)
                                         .strong(),

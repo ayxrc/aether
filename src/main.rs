@@ -155,7 +155,75 @@ fn load_font(ctx: &egui::Context) {
 
     ctx.set_fonts(fonts);
 }
-    
+
+pub fn fix_indic_visual_order(input: &str) -> String {
+    let chars: Vec<char> = input.chars().collect();
+    let mut out = Vec::with_capacity(chars.len());
+
+    for &c in &chars {
+        let is_pre_base_matra = matches!(
+            c,
+            '\u{093F}' | '\u{094E}' | // Devanagari ि
+            '\u{09BF}' | '\u{09C7}' | '\u{09C8}' | // Assamese / Bengali ি, ে, ৈ
+            '\u{0A3F}' | '\u{0ABF}' | '\u{0B47}' | '\u{0B48}' |
+            '\u{0BC6}' | '\u{0BC7}' | '\u{0BC8}' | '\u{0D46}' | '\u{0D47}' | '\u{0D48}'
+        );
+
+        if is_pre_base_matra {
+            let insert_pos = find_cluster_start(&out);
+            out.insert(insert_pos, c);
+            continue;
+        }
+
+        if c == '\u{09CB}' {
+            // Assamese/Bengali ো -> ে before consonant + া after
+            let insert_pos = find_cluster_start(&out);
+            out.insert(insert_pos, '\u{09C7}');
+            out.push('\u{09BE}');
+            continue;
+        } else if c == '\u{09CC}' {
+            // Assamese/Bengali ৌ -> ে before consonant + ৗ after
+            let insert_pos = find_cluster_start(&out);
+            out.insert(insert_pos, '\u{09C7}');
+            out.push('\u{09D7}');
+            continue;
+        }
+
+        out.push(c);
+    }
+
+    return out.into_iter().collect();
+}
+
+fn find_cluster_start(out: &[char]) -> usize {
+    if out.is_empty() {
+        return 0;
+    }
+    let mut pos = out.len() - 1;
+
+    // If the consonant has a Nukta (like ड़ = ड + ़) or Chandrabindu/Anusvara, step past it too!
+    while pos > 0 && matches!(out[pos], '\u{093C}' | '\u{09BC}' | '\u{0901}' | '\u{0981}') {
+        pos -= 1;
+    }
+
+    // Walk backwards through any Halant/Hasanta/Virama (্ / ्) conjunct chains
+    while pos >= 2 && is_virama(out[pos - 1]) {
+        pos -= 2;
+        while pos > 0 && matches!(out[pos], '\u{093C}' | '\u{09BC}') {
+            pos -= 1;
+        }
+    }
+
+    return pos;
+}
+
+fn is_virama(c: char) -> bool {
+    return matches!(
+        c,
+        '\u{094D}' | '\u{09CD}' | '\u{0A4D}' | '\u{0ACD}'
+            | '\u{0B4D}' | '\u{0BCD}' | '\u{0C4D}' | '\u{0CCD}' | '\u{0D4D}'
+    );
+}
     
 
 
